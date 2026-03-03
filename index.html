@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+@font-face {
+    font-family: 'OngleipParkDahyeon';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
+*{
+  -webkit-tap-highlight-color: transparent;}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+	touch-action: manipulation;
+}
+
+.image-wrapper img {
+    width: 80vw;
+    max-width: 420px;
+    height: auto;
+    border-radius: 16px;
+    display: block;
+}
+
+/* 말풍선 */
+.click-bubble {
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-family: 'OngleipParkDahyeon', sans-serif;
+    font-size: clamp(14px, 4vw, 20px);
+    max-width: 95vw;
+    text-align: center;
+    white-space: normal;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+/* 말풍선 꼬리 */
+.click-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+
+/* 캐릭터 애니메이션 */
+.pop-character {
+    animation: bubblePop 0.25s ease-out;
+}
+
+@keyframes bubblePop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(0.92); }
+    70%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pop-bubble {
+    animation: bubblePopBubble 0.25s ease-out;
+}
+
+@keyframes bubblePopBubble {
+    0%   { transform: translateX(-50%) scale(1); }
+    30%  { transform: translateX(-50%) scale(0.92); }
+    70%  { transform: translateX(-50%) scale(1.05); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+
+.show {
+    opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="image-wrapper" id="character">
+    <img src="https://i.ibb.co/pBD3vZTz/IMG-2067.webp" width="300">
+    <div class="click-bubble" id="bubble"></div>
+</div>
+
+<script>
+const messages = [
+    "소관이 필요한가?",
+
+"하하, 성가시군!",
+
+"찌르는 건 선호하지 않네.",
+
+"마음이 복잡하기라도 한가?",
+
+"소관에게 무엇을 바라는 겐가!",
+
+"위로는 소관의 분야가 아니네.\n하지만 귀관이 만족한다면!",
+
+"뭐가 문제인가?",
+
+"차라리 쓰다듬게! 찌르는 건 별로라네!",
+
+"무례하군!",
+
+"귀관도 결국 하나의 우자일 뿐이지.",
+
+"정말 그걸로 만족하는가?",
+
+"이해할 수 없네, 소관은…",
+
+"아닐세, 그저 넋두리에 가까웠네!",
+
+"응? 그건 부정적인 감정 아닌가. 병일세!\n소관이 고쳐주지!",
+
+"평화로운 방법이라. 충분히 평화롭다고 생각하네만?",
+
+"옛날 옛날에 소멸한 마법사가 살았다네.\n그 마법사는… 기억할 리가 없지 않나!",
+
+"소관을 「캡틴 르네상스」라 부르게!",
+];
+
+const wrapper = document.getElementById("character");
+const bubble = document.getElementById("bubble");
+
+let hideTimer;
+let lastIndex = -1;
+
+wrapper.addEventListener("click", () => {
+
+    let randomIndex;
+
+    do {
+        randomIndex = Math.floor(Math.random() * messages.length);
+    } while (randomIndex === lastIndex);
+
+    lastIndex = randomIndex;
+    bubble.textContent = messages[randomIndex];
+
+    wrapper.classList.remove("pop-character");
+    bubble.classList.remove("pop-bubble");
+    void wrapper.offsetWidth;
+
+    wrapper.classList.add("pop-character");
+    bubble.classList.add("pop-bubble");
+
+    bubble.classList.add("show");
+
+    clearTimeout(hideTimer);
+
+    hideTimer = setTimeout(() => {
+        bubble.classList.remove("show");
+    }, 5000);
+});
+</script>
+
+</body>
+</html>
